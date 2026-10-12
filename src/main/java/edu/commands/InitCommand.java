@@ -1,27 +1,36 @@
 package edu.commands;
 
-import edu.Main;
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
-import static edu.core.Repository.initPath;
 
-public class InitCommand implements command{
+public class InitCommand implements Command {
+    private final Path workTree;
 
+    public InitCommand(Path workTree) {this.workTree = workTree;}
 
     @Override
-    public void exec(List<String> args) {
+    public int exec(String[] args) {
         try {
-            Path resolve = Files.createDirectory(initPath.resolve(".bru"));
-            System.out.println("LOG " + resolve.toString());
+            Path bru = workTree.resolve(".bru");
 
-            Files.createDirectory(resolve.resolve("objects"));
+            if(Files.exists(bru)){
+                System.out.println("Repositório já inicializado em " + bru);
+                return 1;
+            }
+
+            Files.createDirectories(bru.resolve("objects"));
+            Files.createDirectories(bru.resolve("refs/heads"));
+
+            // Branch, por enquanto eu posso ignorar
+            Files.writeString(bru.resolve("HEAD"), "ref: refs/heads/main\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return 0;
     }
 
 }
