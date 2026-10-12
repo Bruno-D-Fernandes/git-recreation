@@ -25,6 +25,8 @@
     </dependencies>
 
     <build>
+        <finalName>bru</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

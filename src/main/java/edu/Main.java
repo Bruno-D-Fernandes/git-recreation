@@ -1,45 +1,46 @@
 package edu;
 
-import edu.cli.Listener;
+import edu.commands.Command;
+import edu.commands.InitCommand;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class Main{
-    public static List<String> commands;
-
     public static void main(String[] args){
-        // Setta o commands
-        commands = List.of(args);
-        // valida os args do java -jar jarName issoAqui
-        if(!startValidate(commands)) System.out.println("chama o help");
+        Path cwd = Path.of("").toAbsolutePath();
+        Map<String, Command> commands = Map.of("init", new InitCommand(cwd));
 
+        // Normalização
+        Stream.of(args).forEach((a) -> a.toLowerCase());
+        for(String a : args) System.out.println(a);
 
-        if(commands.contains("start")){
-            Listener.listen();
+        try {
+            if(commands.containsKey(args[0])) System.exit(commands.get(args[0]).exec(args));
+
+        }catch (Exception e){
+            System.out.println("Estourou foi everything");
+            e.printStackTrace();
         }
 
-        // todo help command
-        if(commands.contains("help") || commands.contains("-h")){
-
-        }
 
     }
 
+    // Descontinuado no momento
     //Validação dos args na inicialização do jar
-    private static boolean startValidate(List<String> commandsParam){
-        if(commandsParam.size() != 1) return false;
-        if(!commandsParam.get(0).equals("start")) return false;
+//    private static boolean startValidate(String[] commandsParam){
+//        if(commandsParam.length != 1) return false;
+//        if(!commandsParam[0].equals("start")) return false;
+//
+//        System.out.println("LOG: START VALIDADO");
+//        return true;
+//    }
 
-        System.out.println("LOG: START VALIDADO");
-        return true;
-    }
-
-    // todo validação do comando, ver se todas as flas/comandos são conhecidos
-    public static boolean commandValidate(List<String> lastCommand){
-
-        if(!lastCommand.get(0).equals("bru")) return false;
+    // todo validação do comando, ver se todas as flags/comandos são conhecidos
+    public static boolean commandValidate(String[] lastCommand){
+        if(lastCommand.length == 0) return false;
 
         System.out.println("LOG: COMANDO VALIDADO");
         return true;
