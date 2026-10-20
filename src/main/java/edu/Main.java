@@ -5,6 +5,7 @@ import edu.commands.InitCommand;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -14,8 +15,8 @@ public class Main{
         Map<String, Command> commands = Map.of("init", new InitCommand(cwd));
 
         // Normalização
-        Stream.of(args).forEach((a) -> a.toLowerCase());
-        for(String a : args) System.out.println(a);
+        for (int i = 0; i < args.length; i++) args[i] = args[i].toLowerCase();
+
 
         try {
             if(commands.containsKey(args[0])) System.exit(commands.get(args[0]).exec(args));

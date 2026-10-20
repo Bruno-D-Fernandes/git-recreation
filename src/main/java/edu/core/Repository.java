@@ -5,7 +5,9 @@ import java.nio.file.Paths;
 
 public class Repository {
 
-    public static final Path initPath = Paths.get("").toAbsolutePath();
+    private final Path worktree;
+
+    public Repository(Path worktree) {this.worktree = worktree;}
 
 
 }
